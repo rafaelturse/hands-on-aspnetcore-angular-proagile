@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProAgile.WebAPI.Model;
 
 namespace ProAgile.WebAPI.Data
 {
@@ -8,5 +9,7 @@ namespace ProAgile.WebAPI.Data
         {
 
         }
+        
+        public DbSet<Event> Events { get; set; }
 }
 }

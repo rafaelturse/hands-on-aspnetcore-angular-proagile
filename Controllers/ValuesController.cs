@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using ProAgile.WebAPI.Data;
 using ProAgile.WebAPI.Model;
 
 namespace ProAgile.WebAPI.Controllers
@@ -12,52 +12,24 @@ namespace ProAgile.WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public DataContext Context { get; }
+        public ValuesController(DataContext context)
+        {
+            Context = context;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Event>> Get()
         {
-            return new Event[] {
-                new Event() {
-                    id = 1,
-                    place = "Toronto Island",
-                    date = DateTime.Now.AddDays(2).ToString("dd/MM/yyy"),
-                    theme = "Angular and .NET Core",
-                    peopleAmount = 1,
-                    lot = "1o lot"
-                },
-                new Event() {
-                    id = 2,
-                    place = "Toronto Island",
-                    date = DateTime.Now.AddDays(2).ToString("dd/MM/yyy"),
-                    theme = "React and Java",
-                    peopleAmount = 1,
-                    lot = "1o lot"
-                }
-            };
+            return Context.Events.ToList();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<Event> Get(int id)
         {
-            return new Event[] {
-                new Event() {
-                    id = 1,
-                    place = "Toronto Island",
-                    date = DateTime.Now.AddDays(2).ToString("dd/MM/yyy"),
-                    theme = "Angular and .NET Core",
-                    peopleAmount = 1,
-                    lot = "1o lot"
-                },
-                new Event() {
-                    id = 2,
-                    place = "Toronto Island",
-                    date = DateTime.Now.AddDays(2).ToString("dd/MM/yyy"),
-                    theme = "React and Java",
-                    peopleAmount = 1,
-                    lot = "1o lot"
-                }
-            }.FirstOrDefault(x => x.id == id);
+            return Context.Events.ToList().FirstOrDefault(x => x.id == id);
         }
 
         // POST api/values

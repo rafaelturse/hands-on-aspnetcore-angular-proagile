@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProAgile.WebAPI.Data;
 using ProAgile.WebAPI.Model;
@@ -20,9 +21,17 @@ namespace ProAgile.WebAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Event>> Get()
+        public IActionResult Get()
         {
-            return Context.Events.ToList();
+            try
+            {
+                var results = Context.Events.ToList();
+                return Ok(results);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Fail");
+            }
         }
 
         // GET api/values/5

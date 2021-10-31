@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProAgile.WebAPI.Data;
 using ProAgile.WebAPI.Model;
 
@@ -21,11 +22,11 @@ namespace ProAgile.WebAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var results = Context.Events.ToList();
+                var results = await Context.Events.ToListAsync();
                 return Ok(results);
             }
             catch (System.Exception)
@@ -36,9 +37,17 @@ namespace ProAgile.WebAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Event> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return Context.Events.ToList().FirstOrDefault(x => x.id == id);
+            try
+            {
+                var results = await Context.Events.FirstOrDefaultAsync(x => x.id == id);
+                return Ok(results);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Fail");
+            }
         }
 
         // POST api/values
